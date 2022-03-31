@@ -38,7 +38,7 @@ def get_items():
 
 
 # レポート 損益計算書
-def get_report_trial_pl():
+def get_reports_trial_pl():
     data = {
         "company_id": company_id,
         "fiscal_year": 2022,
@@ -76,6 +76,34 @@ def get_report_trial_pl():
         print("----------------------------")
 
 
+def get_reports_trial_bs():
+    data = {
+        "company_id": company_id,
+        "fiscal_year": 2022,
+        "account_item_display_type": "account_item",
+        "breakdown_display_type": "item",
+    }
+    response = get_freee("reports/trial_bs", data)
+    list = response.json()
+    print(list['trial_bs'])
+    print("----------------------------")
+    for it in list['trial_bs']['balances']:
+        print(it.get('account_item_id'))
+        print(it.get('account_item_name'))
+        print(it.get('account_category_name'))
+        print(it.get('hierarchy_level'))
+        print(it.get('parent_account_category_name'))
+        print(it.get('opening_balance'))
+        print(it.get('debit_amount'))
+        print(it.get('credit_amount'))
+        print(it.get('closing_balance'))
+        print(it.get('composition_ratio'))
+        if it.get('items') is not None:
+            for it2 in it.get('items'):
+                print("    " + str(it2))
+                print("    ----------------------------")
+
+
 def get_freee(resourse, in_data):
     response = requests.get(
         "https://api.freee.co.jp/api/1/" + resourse,
@@ -91,4 +119,7 @@ def get_freee(resourse, in_data):
 # 品目
 # get_items()
 # 損益計算書
-get_report_trial_pl()
+# get_reports_trial_pl()
+# 貸借対照表
+get_reports_trial_bs()
+
